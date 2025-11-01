@@ -116,21 +116,25 @@ python pcd_inference_pointnet.py
 ```
 ---
 
-##  Sample Outputs
+## Results
 
-> You can drop your visuals here.
+**Training setup.** The model was trained for **25 epochs** on XYZRGBI features with a subsample size of 2048. With additional training and tuning, performance is expected to improve.
 
-* **Colored prediction (PLY screenshots)**
+**Qualitative findings.** From the segmentation maps and point-cloud visualizations, the model correctly identifies most **buildings**, **ground**, and **vegetation**. The remaining errors are mainly:
 
-  * `images/pred_scene_01.png`
-  * `images/pred_scene_02.png`
+* **Vegetation ↔ Building** mix-ups.
+* **Building ↔ Ground** mix-ups near edges and contact regions.
+
+  <img width="900" height="600" alt="image" src="https://github.com/user-attachments/assets/198a1eee-27c8-41af-b4b2-fd0cc8cb2d66" />
+  <img width="900" height="600" alt="image" src="https://github.com/user-attachments/assets/da3ee521-9d7c-4796-92d8-8a69975c53d7" />
 
 * **Confusion Matrix**
+The matrix reflects these observations, showing higher off-diagonal counts for the pairs above while other classes remain largely well separated.
 
-  * `images/confusion_matrix.png`
+  * <img width="600" height="600" alt="confusion_matrix" src="https://github.com/user-attachments/assets/2c17f7a0-954e-4e12-b5af-7291feb17e1c" />
+Results are already reasonable after 25 epochs; more training and light tuning should reduce the boundary confusions and sharpen class separation.
 
 ---
-
 ## Citation / Acknowledgements
 
 * Inspired by **PointNet**: *Qi et al., “PointNet: Deep Learning on Point Sets for 3D Classification and Segmentation,” CVPR 2017.*
