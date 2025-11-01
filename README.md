@@ -134,6 +134,6 @@ python pcd_inference_pointnet.py
 ## Citation / Acknowledgements
 
 * Inspired by **PointNet**: *Qi et al., “PointNet: Deep Learning on Point Sets for 3D Classification and Segmentation,” CVPR 2017.*
-* I also want to thank [Prof. Florent Poux](https://learngeodata.eu/) for his amazing 3D computer vision courses and tutorials. His course, tutorials and data helped to learn 3D vision from scratch including how to implement PointNet and use for Point cloud classificaiton. 
+* I want to thank [Prof. Florent Poux](https://learngeodata.eu/) for his amazing 3D computer vision courses and tutorials. His course, tutorials and data helped to learn 3D vision from scratch including how to implement PointNet and use for Point cloud classificaiton. 
 
 ---
