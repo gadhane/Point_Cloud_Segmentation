@@ -281,7 +281,7 @@ def run_one_epoch(model, PCC, loader, optimizer, device, train: bool, ignore_ind
     return epoch_loss, epoch_acc
 
 # -------------------------
-# 2) Full training loop (same logic, just encapsulated)
+# 2) Full training loop
 # -------------------------
 def train_full(args):
     device = torch.device("cuda" if (args.cuda and torch.cuda.is_available()) else "cpu")
@@ -320,7 +320,7 @@ def train_full(args):
     return ckpt_path
 
 # -------------------------
-# 3) Main (define args to match your current file)
+# 3) Main 
 # -------------------------
 def build_args():
     """Mirror your existing hyper-parameters without changing defaults."""
@@ -335,7 +335,7 @@ def build_args():
     args.cuda            = 1  # set 0 to force CPU
     args.seed            = 42
 
-    # model MLPs (as you used before)
+    # model MLPs 
     args.mlp1 = [32, 32]
     args.mlp2 = [32, 64, 256]
     args.mlp3 = [128, 64, 32]
@@ -361,3 +361,4 @@ def main():
 # If this file is executed directly, run training.
 if __name__ == "__main__":
     main()
+
