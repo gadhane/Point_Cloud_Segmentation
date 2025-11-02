@@ -30,11 +30,11 @@ PROJECT_DIR = Path("data")
 TEST_GLOB   = str(PROJECT_DIR / "test" / "*.txt")
 CHECKPOINT  = "best_model.pth"
 
-CLOUD_FEATURES = "xyzrgbi"                       # features used by your loader/model
+CLOUD_FEATURES = "xyzrgbi"  # features used by the loader/model
 CLASS_NAMES    = ['unclassified', 'vegetation', 'ground', 'buildings']
-GPU_USE        = 0                               # set to 1 only if your PointCloudClassifier.run is device-aware
+GPU_USE        = 0   # set to 1 only if your PointCloudClassifier.run is device-aware
 
-# Args that mirror your training hyper-parameters
+# Args 
 def build_args() -> mock.Mock:
     args = mock.Mock()
     args.n_classes      = len(CLASS_NAMES)
@@ -56,7 +56,7 @@ def load_model(checkpoint_path: str | Path, args: mock.Mock, device: torch.devic
         n_class=args.n_classes,
         input_feat=len(args.input_feats),          # 7 for "xyzrgbi"
         subsample_size=args.subsample_size,
-        cuda=0,                                    # we'll move it manually to 'device'
+        cuda=0,                                    
     )
     state = torch.load(str(checkpoint_path), map_location=device)
     model.load_state_dict(state)
@@ -81,10 +81,10 @@ def predict_tile(
         pcd  : o3d.geometry.PointCloud (points only; colors can be assigned later)
         labels: np.ndarray of shape [N,] with predicted class ids
     """
-    # Load features & ground-truth just like training
+    # Load features & ground-truth
     cloud, gt = cloud_loader(str(tile_path), features_used)
 
-    # (Optional) move to device if your PointCloudClassifier.run supports CUDA.
+    
     # By default we keep CPU to avoid device mismatch with PCC internals.
     if device is not None and device.type == "cuda":
         cloud = cloud.to(device)
@@ -96,7 +96,7 @@ def predict_tile(
         labels = logits.argmax(dim=1).squeeze().cpu().numpy()
     print(f"[{Path(tile_path).name}] Prediction time: {time.time() - t0:.2f}s")
 
-    # Build Open3D point cloud (geometry only for now)
+    # Build Open3D point cloud
     xyz = np.asarray(cloud[0:3].cpu() if torch.is_tensor(cloud) else cloud[0:3]).T  # [N,3]
     pcd = o3d.geometry.PointCloud()
     pcd.points = o3d.utility.Vector3dVector(xyz)
@@ -163,7 +163,7 @@ def export_predictions_txt_ply(
     o3d.io.write_point_cloud(str(out_ply), pcd, write_ascii=True)
 
 
-# ========= Optional: qualitative loop =========
+# =========qualitative loop =========
 def preview_first_k(
     inference_files: list[str],
     k: int,
@@ -280,7 +280,7 @@ def main():
     print(f"Using device: {device.type.upper()}")
 
     # 3) Init PCC and model
-    pcc   = PointCloudClassifier(args)   # if you made PCC device-aware, pass device=device
+    pcc   = PointCloudClassifier(args)   
     model = load_model(CHECKPOINT, args, device)
 
     # 4) Single-tile example (interactive visualization)
@@ -303,7 +303,7 @@ def main():
     export_predictions_txt_ply(pcd, labels, export_txt, export_ply)
     print(f"Saved: {export_txt} and {export_ply}")
 
-    # 7) Full metrics over the test folder (requires GT in your TXT files)
+    # 7) Full metrics over the test folder 
     metrics = evaluate_folder_with_gt(inference_list, model, pcc, args.input_feats, CLASS_NAMES)
     print("\n===== Test Metrics =====")
     print(f"Overall Accuracy: {metrics['overall_accuracy_%']:.2f}%")
@@ -320,3 +320,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
