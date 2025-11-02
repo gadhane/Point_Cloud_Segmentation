@@ -1,6 +1,5 @@
 # =========================
-# Minimal modularization for TRAINING ONLY
-# Keep inference as-is in its own file.
+#PCD classification using PointNet
 # =========================
 
 import os
@@ -13,7 +12,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torchnet as tnt
 from torch.optim.lr_scheduler import MultiStepLR
-from sklearn.neighbors import NearestNeighbors  # kept because your current logic uses it
+from sklearn.neighbors import NearestNeighbors 
 from tqdm.auto import tqdm
 import mock
 import random
@@ -225,7 +224,7 @@ def build_model_and_optimizer(args):
     return model, optimizer, scheduler
 
 # -------------------------
-# 1) One training/validation step (logic preserved)
+# 1) One training/validation step
 # -------------------------
 def forward_batch(model, PCC, batch, device, ignore_index=None):
     """
@@ -287,13 +286,13 @@ def train_full(args):
     device = torch.device("cuda" if (args.cuda and torch.cuda.is_available()) else "cpu")
     set_seed(args.seed)
 
-    # datasets & loaders (unchanged logic)
+    # datasets & loaders
     (train_list, valid_list, test_list), (train_set, valid_set, _) = build_datasets(args.data_path, args.input_feats)
     train_loader, valid_loader = build_loaders(train_set, valid_set, args.batch_size)
 
     # model, optimizer, scheduler
     model, optimizer, scheduler = build_model_and_optimizer(args)
-    PCC = PointCloudClassifier(args)  # keep your current classifier as-is
+    PCC = PointCloudClassifier(args) 
 
     best_valid_acc = -1.0
     os.makedirs(args.checkpoint_dir, exist_ok=True)
@@ -311,7 +310,7 @@ def train_full(args):
               f"valid_loss={valid_loss:.4f} acc={valid_acc*100:.2f}% | "
               f"time={dt:.1f}s")
 
-        # keep your original checkpoint criterion (e.g., best val acc)
+        
         if valid_acc > best_valid_acc:
             best_valid_acc = valid_acc
             torch.save(model.state_dict(), ckpt_path)
@@ -358,7 +357,7 @@ def main():
     ckpt = train_full(args)
     print(f"Training complete. Best checkpoint: {ckpt}")
 
-# If this file is executed directly, run training.
 if __name__ == "__main__":
     main()
+
 
